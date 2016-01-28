@@ -14,6 +14,10 @@ it collects the words in Para/Plain/Strong/Emph/Header section, send them for tr
 
 Note that , you need to use your own translation API for it. It is a fake translation call in the code, which makes the code runnable.
 
+# More info in Chinese
+
+<http://www.bagualu.net/wordpress/archives/5340#%E7%AC%AC%E4%BA%8C%E4%B8%AAfilter%E8%8B%B1%E6%96%87%E7%BF%BB%E8%AF%91>
+
 # License
 
 MIT License
