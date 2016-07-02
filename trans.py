@@ -11,6 +11,12 @@ import time
 appid = 'youridhere'
 secretKey = 'yourkey'
 
+
+debug=0
+
+if debug == 1:
+    fh = open("a.log","w")
+
 def trans(qq): 
     httpClient = None
     myurl = '/api/trans/vip/translate'
@@ -23,6 +29,8 @@ def trans(qq):
     m1 = md5.new()
     m1.update(sign)
     sign = m1.hexdigest()
+    if debug == 1:
+        return None
     myurl = myurl+'?appid='+appid+'&q='+urllib.quote(q)+'&from='+fromLang+'&to='+toLang+'&salt='+str(salt)+'&sign='+sign
      
     try:
@@ -47,8 +55,11 @@ def trans(qq):
             httpClient.close()
 
 def transWrapper(content):
-    return '@@%s@@'%content
-    time.sleep(0.1)
+    #return '@B%sE@'%content
+    if debug == 1:
+        fh.write('@B%sE@'%content)
+    time.sleep(0.2)
+    #print content
     res = trans(content)
     out=""
     if res != None:
@@ -57,16 +68,21 @@ def transWrapper(content):
     return out
 
 
-from pandocfilters import toJSONFilter, Emph, Para, Str, stringify, Header , Strong, Plain
+from pandocfilters import toJSONFilter, Emph, Para, Str, stringify, Header , Strong, Plain, Link
 
 def transPara(key, value, format, meta):
       if key == 'Para'  or key == 'Plain':
+          #print "Para"
+          if debug == 1:
+             fh.write("Para \n")
           out= []
           curstr=""
           for sv in value:
               #print "processing...", sv
               if sv['t'] == "Str":
                   curstr = curstr + sv['c'] 
+                  if debug == 1:
+                      fh.write("out %s\n"%curstr)
               elif sv['t'] == "Space" or sv['t'] == "SoftBreak" or sv['t'] == "LineBreak":
                   curstr = curstr + ' '
               else: #othe items , just keep them
@@ -84,17 +100,37 @@ def transPara(key, value, format, meta):
               return Plain(out)
       #assume simple strong ,Emph and header, no more sub structure in the strong/Emph/Header
       elif key == 'Strong':
+          #print "Strong"
+          if debug == 1:
+              fh.write("Strong \n")
           hstr = stringify(value)
           trStr=transWrapper(hstr)
           return Strong([Str(trStr)])
       elif key == 'Emph':
+          #print "Emph"
+          if debug == 1:
+              fh.write("Emph\n")
           hstr = stringify(value)
           trStr=transWrapper(hstr)
           return Emph([Str(trStr)])
       elif key == 'Header':
+          #print "Header"
+          if debug == 1:
+              fh.write("Header\n")
           hstr = stringify(value)
           trStr=transWrapper(hstr)
           return Header(value[0],value[1],[Str(trStr)])
+      elif key == 'Link':
+          #print "Link"
+          if debug == 1:
+              fh.write("Link\n")
+          hstr = stringify(value)
+          trStr=""
+          if len(hstr) < 1:
+            trStr=""
+          else:
+            trStr=transWrapper(hstr)
+          return Link(value[0],[Str(trStr)],value[2])
       else:
           return None
 
