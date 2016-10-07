@@ -10,20 +10,21 @@ import time
 import re
 
 
-debug=0
-
-if debug == 1:
-    fh = open("a.log","w")
-
 from pandocfilters import toJSONFilter, Emph, Para, Str, stringify, Header , Strong, Plain, Link , Space
+
+#suring the md to org , the inline code 你好`hello world`世界
+#is converted to 你好=hello world=世界 , but this format is not correctly
+#converted to html, the right output should be
+#     你好 =hello world= 世界
+#while, this filter is to insert the prefix and suffix blank for the inline
+#code
+
+#the usage is:
+#pandoc -f markdown -t org --filter ./md2org_filter.py -o tt.org ./tt.md
 
 def transPara(key, value, format, meta):
       if key == 'Para':
-          #print "Para"
-          if debug == 1:
-             fh.write("Para \n")
           out= []
-          curstr=""
           for sv in value:
               if sv['t'] == "Code":
                   pre_space = Space()
