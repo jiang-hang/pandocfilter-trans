@@ -8,6 +8,10 @@ perl -p -i -e "s/ﬁ/fi/g"  $*
 perl -p -i -e "s/ﬃ/ffi/g" $*
 perl -p -i -e "s/ﬂ/fl/g" $*
 perl -p -i -e "s/°//g" $*
+perl -p -i -e "s/¸//g" $*
+perl -p -i -e "s/´//g" $*
+perl -p -i -e "s/ⱖ//g" $*
+perl -p -i -e "s/ⱕ//g" $*
 perl -p -i -e "s//0/g"  $*   #ef 9cf3  3  => f733
 perl -p -i -e "s//1/g"  $*   #ef 9cf3  3  => f733
 perl -p -i -e "s//2/g"  $*   #ef 9cf3  3  => f733
