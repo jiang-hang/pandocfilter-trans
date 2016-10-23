@@ -12,7 +12,7 @@ import re
 
 from pandocfilters import toJSONFilter, Emph, Para, Str, stringify, Header , Strong, Plain, Link , Space
 
-#suring the md to org , the inline code 你好`hello world`世界
+#during the md to org , the inline code 你好`hello world`世界
 #is converted to 你好=hello world=世界 , but this format is not correctly
 #converted to html, the right output should be
 #     你好 =hello world= 世界
